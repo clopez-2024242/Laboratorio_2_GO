@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:13
+    container_name: 2024242_gestor_opinoes
+    environment:
+      POSTGRES_USER: GESTOR_OPS
+      POSTGRES_PASSWORD: carlosL241107@
+      POSTGRES_DB: gestor_opiniones
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
