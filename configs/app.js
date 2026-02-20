@@ -18,6 +18,8 @@ import {
 import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/users/user.routes.js';
 import publicationRoutes from '../src/publication/publication.routes.js';
+import commentRoutes from '../src/comment/comment.routes.js';
+import { errorHandler } from './middlewares/error-handler.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -28,12 +30,14 @@ const middlewares = (app) => {
   app.use(helmet(helmetConfiguration));
   app.use(requestLimit);
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
+  app.use(errorHandler);
 };
 
 const routes = (app) => {
   app.use(`${BASE_PATH}/auth`, authRoutes);
   app.use(`${BASE_PATH}/users`, userRoutes);
   app.use(`${BASE_PATH}/publication`, publicationRoutes);
+  app.use(`${BASE_PATH}/comments`, commentRoutes);
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
     res.status(200).json({
