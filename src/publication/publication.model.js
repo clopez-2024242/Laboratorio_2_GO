@@ -29,5 +29,5 @@ export const Publication = sequelize.define('Publication', {
     });
 
 // Relación
-User.hasMany(Post, { foreignKey: 'authorId' });
-Post.belongsTo(User, { foreignKey: 'authorId' });
+User.hasMany(Publication, { foreignKey: 'authorId' });
+Publication.belongsTo(User, { foreignKey: 'authorId' });
