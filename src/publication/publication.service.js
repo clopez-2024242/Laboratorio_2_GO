@@ -1,6 +1,6 @@
 import { Publication } from './publication.model.js';
 
-export const createPublicarionService = async (data, userId) => {
+export const createPublicationService = async (data, userId) => {
   return await Publication.create({
     ...data,
     authorId: userId
@@ -13,11 +13,11 @@ export const getAllPublicationsService = async () => {
   });
 };
 
-export const getPublicarionByIdService = async (id) => {
+export const getPublicationByIdService = async (id) => {
   return await Publication.findByPk(id);
 };
 
-export const updatePublicacionService = async (id, userId, data) => {
+export const updatePublicationService = async (id, userId, data) => {
   const publication = await Publication.findByPk(id);
   if (!publication){
     console.error('Publicacion no Existente');
