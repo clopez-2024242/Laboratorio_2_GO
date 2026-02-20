@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:13
-    container_name: 2024242_gestor_opinoes
+    container_name: 2024242_gestor_opiones
     environment:
       POSTGRES_USER: GESTOR_OPS
       POSTGRES_PASSWORD: carlosL241107@
