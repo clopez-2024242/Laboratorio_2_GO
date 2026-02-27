@@ -6,7 +6,7 @@ import { generateUserId } from '../../helpers/uuid-generator.js';
 export const User = sequelize.define(
   'User',
   {
-    Id: {
+    userId: {
       type: DataTypes.STRING(16),
       primaryKey: true,
       field: 'id',
