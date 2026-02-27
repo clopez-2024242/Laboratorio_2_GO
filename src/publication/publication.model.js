@@ -19,15 +19,26 @@ export const Publication = sequelize.define('Publication', {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    IdAutor: {
+    authorId: {
         type: DataTypes.STRING(16),
         allowNull: false
+    },
+    updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+        field: 'updated_at',
+    },
+    deletedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'deleted_at'
     }
     }, {
     tableName: 'publication',
-    timestamps: true
+    timestamps: false
     });
 
 // Relación
-User.hasMany(Publication, { foreignKey: 'authorId' });
-Publication.belongsTo(User, { foreignKey: 'authorId' });
+User.hasMany(Publication, { foreignKey: 'numero' });
+Publication.belongsTo(User, { foreignKey: 'numero' });
