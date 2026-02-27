@@ -1,10 +1,12 @@
 import { Publication } from './publication.model.js';
 
-export const createPublicationService = async (data, userId) => {
-  return await Publication.create({
+export const createPublicationService = async (data, authorId) => {
+  const publication = await Publication.create({
     ...data,
-    authorId: userId
+    authorId: authorId
   });
+
+  return publication;
 };
 
 export const getAllPublicationsService = async () => {
@@ -14,17 +16,24 @@ export const getAllPublicationsService = async () => {
 };
 
 export const getPublicationByIdService = async (id) => {
-  return await Publication.findByPk(id);
+  const publication = await Publication.findByPk(id);
+
+  if (!publication) {
+    throw new Error('Publicación no encontrada');
+  }
+
+  return publication;
 };
 
 export const updatePublicationService = async (id, userId, data) => {
   const publication = await Publication.findByPk(id);
-  if (!publication){
-    console.error('Publicacion no Existente');
-  } 
+  
+  if(!publication){
+    throw new Error('Publicación no encontrada');
+  }
 
-  if (publication.authorId !== userId){
-    console.error('No Autorizado');
+  if(publication.authorId !== userId){
+    throw new Error('No autorizado');
   }
     
 
@@ -32,13 +41,17 @@ export const updatePublicationService = async (id, userId, data) => {
   return publication;
 };
 
-export const deletePublicationService = async (id, userId) => {
+export const deletePublicationService = async (id, authorId) => {
   const publication = await Publication.findByPk(id);
-  if (!publication){
-    console.error('Publicacion no Encontrada');
+
+  if (!publication) {
+    throw new Error('Publicación no encontrada');
   }
-  if (post.authorId !== userId){
-    console.error('Unauthorized');
+
+  if (publication.authorId !== userId) {
+    throw new Error('No autorizado');
   }
-  await post.destroy();
+  
+  await publication.destroy();
+  return publication;
 };
