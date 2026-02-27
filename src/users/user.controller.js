@@ -84,3 +84,31 @@ export const getUsersByRole = [
     return res.status(200).json(payload);
   }),
 ];
+
+export const changePasswordController = asyncHandler(
+  async (req, res) => {
+    const user = req.user;
+    const { currentPassword, newPassword } = req.body;
+
+    const isMatch = await bcrypt.compare(
+      currentPassword,
+      user.Password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: 'La contraseña actual es incorrecta',
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await user.update({ Password: hashedPassword });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Contraseña actualizada correctamente',
+    });
+  }
+);
