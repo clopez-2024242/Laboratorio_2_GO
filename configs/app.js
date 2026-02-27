@@ -5,21 +5,19 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { dbConnection } from './db.js';
+
 // Ensure models are registered before DB sync
 import '../src/users/user.model.js';
 import '../src/auth/role.model.js';
 import { requestLimit } from '../middlewares/request-limit.js';
 import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configuration.js';
-import {
-  errorHandler,
-  notFound,
-} from '../middlewares/server-genericError-handler.js';
+
 import authRoutes from '../src/auth/auth.routes.js';
 import userRoutes from '../src/users/user.routes.js';
 import publicationRoutes from '../src/publication/publication.routes.js';
 import commentRoutes from '../src/comment/comment.routes.js';
-import { errorHandler } from './middlewares/error-handler.js';
+import { errorHandler , notFound} from '../middlewares/error-handler.js';
 
 const BASE_PATH = '/api/v1';
 
@@ -30,20 +28,19 @@ const middlewares = (app) => {
   app.use(helmet(helmetConfiguration));
   app.use(requestLimit);
   app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
-  app.use(errorHandler);
 };
 
 const routes = (app) => {
   app.use(`${BASE_PATH}/auth`, authRoutes);
   app.use(`${BASE_PATH}/users`, userRoutes);
-  app.use(`${BASE_PATH}/publication`, publicationRoutes);
+  app.use(`${BASE_PATH}/publications`, publicationRoutes);
   app.use(`${BASE_PATH}/comments`, commentRoutes);
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
     res.status(200).json({
       status: 'Healthy',
       timestamp: new Date().toISOString(),
-      service: 'KinalSports Authentication Service',
+      service: 'Gestor De opiniones Authentication Service',
     });
   });
   // 404 handler (standardized)
@@ -60,9 +57,11 @@ export const initServer = async () => {
     // Seed essential data (roles)
     const { seedRoles } = await import('../helpers/role-seed.js');
     await seedRoles();
+
     middlewares(app);
     routes(app);
 
+    app.use(notFound);
     app.use(errorHandler);
 
     app.listen(PORT, () => {
